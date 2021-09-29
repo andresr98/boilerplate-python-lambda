@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+  pre_build:
+    commands:
+      - echo "Installing test dependencies..."
+      - pip install -r app/requirements.txt
+      - echo "Dependencies installed."
+  build:
+    commands:
+      #- echo "Starting build process..."
+      #- echo "Running unit tests..."
+      #- python -m pytest app
+      #- echo "Unit test finished."
+      - echo "Building template...."
+      - sam build -t $BUILD_TEMPLATE --use-container
+      - sam package -t .aws-sam/build/template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
+      - echo "Template created successfully."
+      - echo "Build process finished."
+artifacts:
+  files:
+    - .aws-sam/build/template.yaml
+    - outputtemplate.yml

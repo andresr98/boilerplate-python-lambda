@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Sample Python-Lambda Function project
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    Runtime: python3.7
+
+Resources:
+
+  # Lambda Function
+  HelloWorldLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: boilerplate-hello-world-lambda-function # Should be replace for real name
+      CodeUri: app/hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      MemorySize: 128 # Should be replace as needed
+      Timeout: 30 # Should be replace as needed
+      Role: !GetAtt "HelloWorldLambdaExecutionRole.Arn"
+      # Replace Tags with current values
+      Tags:
+        Name: "boilerplate-hello-world-lambda-function"
+        CreateBy: "Person Name"
+        CreateDate: "10082021" # Ex: 10082021 (10 de agosto del 2021)
+        Project: "Project Name"
+        Environment: "DEV"
+
+  # IAM Role
+  HelloWorldLambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      # Should be replace as needed
+      RoleName: HelloWorldLambdaExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+                Service:
+                  - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      # If a manage policy already exists attach arn here
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+      # If you need a custom policy, create it here
+      Policies:
+        - PolicyName: LambdaBasicExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+      # Replace with current values
+      Tags:
+        - Key: "CreateBy"
+          Value: "Person Name"
+        - Key: "CreateDate"
+          Value: "10082021" # Ex: 10082021 (10 de agosto del 2021)
+        - Key: "Project"
+          Value: "Project Name"
+        - Key: "Environment"
+          Value: "DEV"
+        - Key: "Name"
+          Value: "HelloWorldLambdaExecutionRole"

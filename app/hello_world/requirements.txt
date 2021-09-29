@@ -1,0 +1,2 @@
+# Lambda dependencies. Do not forget to put the library version.
+numpy==1.21.0
